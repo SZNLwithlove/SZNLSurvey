@@ -167,6 +167,7 @@
 
         <div class="question-group">
             <label>7. Management Effort</label>
+            <label style="font-weight: normal;">How would you prefer to list your items on the SZNL platform?</label>
             <div class="radio-group">
                 <label class="radio-option"><input type="radio" name="b_effort" value="Self" required> I'll upload photos/info myself.</label>
                 <label class="radio-option"><input type="radio" name="b_effort" value="White Glove"> I want SZNL to come and photograph/list for me.</label>
@@ -176,6 +177,7 @@
 
         <div class="question-group">
             <label>8. Damage & Security</label>
+            <label style="font-weight: normal;">What specific security measures or insurance coverage would be mandatory for you to list high-value pieces?</label>
             <input type="text" name="b_security_needs" placeholder="e.g. Damage insurance, ID verification, etc.">
         </div>
 
@@ -286,7 +288,8 @@
     <div id="success-message" class="success-msg">
         <h2>Submission Successful.</h2>
         <p>Your feedback is invaluable. We are launching <strong>SZNL</strong> soon.</p>
-        <p style="font-size: 0.9rem; color: #777; margin-top: 15px;">We have received your details. Look out for our upcoming beta announcement.</p>
+        <p style="font-size: 0.9rem; color: #777; margin-top: 15px;">Check your email for activation if this is your first submission.</p>
+        <p style="font-size: 0.9rem; color: #777; margin-top: 5px;">We have received your details. Look out for our upcoming beta announcement.</p>
         <button class="role-btn" onclick="location.reload()" style="margin-top: 30px; width: auto;">Return to Home</button>
     </div>
 
@@ -297,11 +300,10 @@
         const buttons = document.querySelectorAll('.role-btn');
         buttons.forEach(btn => btn.classList.remove('active'));
         
-        // Use event listener target if called from click, otherwise find by param
-        if (event && event.currentTarget) {
+        // Handle button highlighting
+        if (event && event.currentTarget && event.currentTarget.classList.contains('role-btn')) {
             event.currentTarget.classList.add('active');
         } else {
-            // Manual activation if needed
             const targetIdx = role === 'boutique' ? 0 : 1;
             buttons[targetIdx].classList.add('active');
         }
@@ -310,7 +312,7 @@
         const sForm = document.getElementById('shopper-form');
         const successMsg = document.getElementById('success-message');
 
-        // Reset visibility
+        // Reset visibility and display for all
         bForm.classList.remove('visible');
         sForm.classList.remove('visible');
         bForm.style.display = 'none';
@@ -318,11 +320,11 @@
         successMsg.style.display = 'none';
 
         if(role === 'boutique') {
-            bForm.classList.add('visible');
             bForm.style.display = 'block';
+            setTimeout(() => bForm.classList.add('visible'), 10);
         } else {
-            sForm.classList.add('visible');
             sForm.style.display = 'block';
+            setTimeout(() => sForm.classList.add('visible'), 10);
         }
     }
 
@@ -333,16 +335,12 @@
         const sForm = document.getElementById('shopper-form');
         const successMsg = document.getElementById('success-message');
         
-        const formId = bForm.classList.contains('visible') 
-            ? 'boutique-form' 
-            : 'shopper-form';
-            
-        const form = document.getElementById(formId);
-        const submitBtn = form.querySelector('.submit-btn');
+        // Determine which form is currently active
+        const activeForm = bForm.style.display === 'block' ? bForm : sForm;
+        const submitBtn = activeForm.querySelector('.submit-btn');
 
-        const formData = new FormData(form);
-        
-        formData.append("_subject", "SZNL Market Research: " + (formId === 'boutique-form' ? 'Boutique' : 'Shopper'));
+        const formData = new FormData(activeForm);
+        formData.append("_subject", "SZNL Market Research: " + (activeForm.id === 'boutique-form' ? 'Boutique' : 'Shopper'));
         formData.append("_captcha", "false");
         formData.append("_template", "table");
 
@@ -356,7 +354,7 @@
             });
 
             if (response.ok) {
-                // Hide both forms to be safe
+                // Hide both forms
                 bForm.style.display = 'none';
                 sForm.style.display = 'none';
                 bForm.classList.remove('visible');
@@ -369,9 +367,9 @@
             }
         } catch (error) {
             console.warn("AJAX failed, trying standard redirect...", error);
-            form.action = "https://formsubmit.co/jilanizehra@gmail.com";
-            form.method = "POST";
-            form.submit();
+            activeForm.action = "https://formsubmit.co/jilanizehra@gmail.com";
+            activeForm.method = "POST";
+            activeForm.submit();
         }
     }
 </script>
