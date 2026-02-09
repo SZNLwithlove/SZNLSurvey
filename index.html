@@ -167,7 +167,6 @@
 
         <div class="question-group">
             <label>7. Management Effort</label>
-            <label style="font-weight: normal;">How would you prefer to list your items on the SZNL platform?</label>
             <div class="radio-group">
                 <label class="radio-option"><input type="radio" name="b_effort" value="Self" required> I'll upload photos/info myself.</label>
                 <label class="radio-option"><input type="radio" name="b_effort" value="White Glove"> I want SZNL to come and photograph/list for me.</label>
@@ -177,7 +176,6 @@
 
         <div class="question-group">
             <label>8. Damage & Security</label>
-            <label style="font-weight: normal;">What specific security measures or insurance coverage would be mandatory for you to list high-value pieces?</label>
             <input type="text" name="b_security_needs" placeholder="e.g. Damage insurance, ID verification, etc.">
         </div>
 
@@ -286,9 +284,9 @@
 
     <!-- Success Message -->
     <div id="success-message" class="success-msg">
-        <h2>Thank You.</h2>
+        <h2>Submission Successful.</h2>
         <p>Your feedback is invaluable. We are launching <strong>SZNL</strong> soon.</p>
-        <p style="font-size: 0.9rem; color: #777; margin-top: 15px;">Check your email for activation if this is your first submission.</p>
+        <p style="font-size: 0.9rem; color: #777; margin-top: 15px;">We have received your details. Look out for our upcoming beta announcement.</p>
         <button class="role-btn" onclick="location.reload()" style="margin-top: 30px; width: auto;">Return to Home</button>
     </div>
 
@@ -299,29 +297,43 @@
         const buttons = document.querySelectorAll('.role-btn');
         buttons.forEach(btn => btn.classList.remove('active'));
         
+        // Use event listener target if called from click, otherwise find by param
         if (event && event.currentTarget) {
             event.currentTarget.classList.add('active');
+        } else {
+            // Manual activation if needed
+            const targetIdx = role === 'boutique' ? 0 : 1;
+            buttons[targetIdx].classList.add('active');
         }
 
-        document.getElementById('boutique-form').classList.remove('visible');
-        document.getElementById('shopper-form').classList.remove('visible');
-        document.getElementById('success-message').style.display = 'none';
+        const bForm = document.getElementById('boutique-form');
+        const sForm = document.getElementById('shopper-form');
+        const successMsg = document.getElementById('success-message');
+
+        // Reset visibility
+        bForm.classList.remove('visible');
+        sForm.classList.remove('visible');
+        bForm.style.display = 'none';
+        sForm.style.display = 'none';
+        successMsg.style.display = 'none';
 
         if(role === 'boutique') {
-            document.getElementById('boutique-form').classList.add('visible');
-            document.getElementById('boutique-form').style.display = 'block';
-            document.getElementById('shopper-form').style.display = 'none';
+            bForm.classList.add('visible');
+            bForm.style.display = 'block';
         } else {
-            document.getElementById('shopper-form').classList.add('visible');
-            document.getElementById('shopper-form').style.display = 'block';
-            document.getElementById('boutique-form').style.display = 'none';
+            sForm.classList.add('visible');
+            sForm.style.display = 'block';
         }
     }
 
     async function submitForm(e) {
         e.preventDefault();
         
-        const formId = document.getElementById('boutique-form').classList.contains('visible') 
+        const bForm = document.getElementById('boutique-form');
+        const sForm = document.getElementById('shopper-form');
+        const successMsg = document.getElementById('success-message');
+        
+        const formId = bForm.classList.contains('visible') 
             ? 'boutique-form' 
             : 'shopper-form';
             
@@ -344,8 +356,14 @@
             });
 
             if (response.ok) {
-                form.style.display = 'none';
-                document.getElementById('success-message').style.display = 'block';
+                // Hide both forms to be safe
+                bForm.style.display = 'none';
+                sForm.style.display = 'none';
+                bForm.classList.remove('visible');
+                sForm.classList.remove('visible');
+                
+                // Show success message
+                successMsg.style.display = 'block';
             } else {
                 throw new Error("Failed to send via AJAX");
             }
