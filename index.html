@@ -44,14 +44,9 @@
 
         /* --- Questions --- */
         .question-group { margin-bottom: 35px; }
+        .section-title { color: var(--gold); font-family: 'Georgia', serif; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
         label { display: block; font-weight: bold; margin-bottom: 12px; color: var(--forest); font-size: 1.05rem; }
         
-        /* Scenario Box */
-        .scenario-box {
-            background: #f8f8f6; border-left: 4px solid var(--gold); padding: 15px;
-            margin-bottom: 15px; font-size: 0.95rem; color: #444; line-height: 1.5;
-        }
-
         /* Inputs */
         input[type="text"], input[type="email"], textarea, select {
             width: 100%; padding: 14px; border: 1px solid #ddd; border-radius: 8px;
@@ -59,8 +54,8 @@
         }
         
         /* Custom Radio */
-        .radio-group { display: flex; gap: 20px; flex-wrap: wrap; }
-        .radio-option { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.95rem; }
+        .radio-group { display: flex; flex-direction: column; gap: 12px; }
+        .radio-option { display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 0.95rem; font-weight: normal !important; }
         input[type="radio"], input[type="checkbox"] { accent-color: var(--forest); transform: scale(1.2); }
 
         /* Submit */
@@ -78,6 +73,10 @@
         /* Success Message */
         .success-msg { text-align: center; color: var(--forest); display: none; padding: 60px 20px; }
         .success-msg h2 { color: var(--gold); font-family: 'Georgia', serif; font-size: 2rem; text-transform: uppercase; letter-spacing: 3px; }
+        
+        /* Inline "Other" styling */
+        .other-input { border: none !important; border-bottom: 1px solid #ccc !important; border-radius: 0 !important; padding: 4px !important; margin-left: 5px; flex: 1; background: transparent !important; }
+        .other-input:focus { outline: none; border-bottom-color: var(--gold) !important; }
     </style>
 </head>
 <body>
@@ -98,187 +97,239 @@
     <form id="boutique-form" class="form-card visible" onsubmit="submitForm(event)">
         <h2 style="color: var(--forest); border-bottom: 1px solid #eee; padding-bottom: 15px; margin-top: 0; font-family: 'Georgia', serif;">Partner Validation</h2>
 
-        <div class="question-group">
-            <label>1. What is your biggest pain point with current inventory?</label>
-            <select name="pain_point" required>
-                <option value="">Select an option...</option>
-                <option value="Dead Stock">Dead stock that won't sell</option>
-                <option value="Low Foot Traffic">Low foot traffic in-store</option>
-                <option value="Competition">Competition from fast fashion</option>
-                <option value="Returns">Managing online returns</option>
-            </select>
-        </div>
+        <div class="section-title">Section 1: Inventory & Operations</div>
 
         <div class="question-group">
-            <label>2. Pricing & ROI</label>
-            <div class="scenario-box">
-                <strong>Proposal:</strong> You list a $600 dress. We price the rental at $20/day. 
-                If a customer rents it for 4 days, you earn <strong>$80</strong> immediately.
-            </div>
-            <label style="font-weight: normal;">Does this ROI sound attractive for your boutique?</label>
+            <label>1. Which of the following is currently your most significant inventory challenge?</label>
             <div class="radio-group">
-                <label class="radio-option"><input type="radio" name="b_roi" value="Attractive" required> Yes, very.</label>
-                <label class="radio-option"><input type="radio" name="b_roi" value="Fair"> It's fair.</label>
-                <label class="radio-option"><input type="radio" name="b_roi" value="Low"> No, too low.</label>
+                <label class="radio-option"><input type="radio" name="b_inventory_challenge" value="Slow moving stock" required> Slow-moving inventory / stock turnover</label>
+                <label class="radio-option"><input type="radio" name="b_inventory_challenge" value="Storage constraints"> Warehouse or back-stock storage constraints</label>
+                <label class="radio-option"><input type="radio" name="b_inventory_challenge" value="Online competition"> Competing with large-scale online retailers</label>
+                <label class="radio-option"><input type="radio" name="b_inventory_challenge" value="Low foot traffic"> In-store foot traffic volume</label>
+                <label class="radio-option">
+                    <input type="radio" name="b_inventory_challenge" value="Other" id="b_q1_other_radio"> 
+                    Other: <input type="text" name="b_inventory_challenge_other" class="other-input" placeholder="Please specify..." onclick="document.getElementById('b_q1_other_radio').checked = true;">
+                </label>
             </div>
         </div>
 
         <div class="question-group">
-            <label>3. Inventory Commitment</label>
-            <label style="font-weight: normal;">Initially, how many high-end pieces would you be comfortable listing for rental?</label>
-            <select name="b_inventory_count" required>
+            <label>2. On average, what percentage of your seasonal inventory remains unsold after the primary season ends?</label>
+            <select name="b_unsold_percentage" required>
                 <option value="">Select range...</option>
-                <option value="1-5">1-5 select pieces</option>
-                <option value="5-15">5-15 pieces</option>
-                <option value="15+">15+ (Significant portion of stock)</option>
+                <option value="0-10%">Less than 10%</option>
+                <option value="11-25%">11% - 25%</option>
+                <option value="26-50%">26% - 50%</option>
+                <option value="50%+">More than 50%</option>
             </select>
         </div>
 
         <div class="question-group">
-            <label>4. Seasonality Strategy</label>
-            <label style="font-weight: normal;">Would you be interested in renting out "off-season" stock to shoppers traveling to different climates?</label>
+            <label>3. How do you currently manage high-value pieces that haven't sold after several months?</label>
             <div class="radio-group">
-                <label class="radio-option"><input type="radio" name="b_off_season" value="Yes" required> Yes, that solves my storage issue.</label>
-                <label class="radio-option"><input type="radio" name="b_off_season" value="Maybe"> Maybe, if the demand is there.</label>
-                <label class="radio-option"><input type="radio" name="b_off_season" value="No"> No, only current season.</label>
+                <label class="radio-option"><input type="checkbox" name="b_unsold_management" value="Markdowns"> Progressive markdowns / sales</label>
+                <label class="radio-option"><input type="checkbox" name="b_unsold_management" value="Outlet"> Transfer to outlet or discount partners</label>
+                <label class="radio-option"><input type="checkbox" name="b_unsold_management" value="Storage"> Long-term storage for future seasons</label>
+                <label class="radio-option"><input type="checkbox" name="b_unsold_management" value="Consignment"> Third-party consignment</label>
+                <label class="radio-option" style="display: flex; align-items: center;">
+                    <input type="checkbox" name="b_unsold_management" value="Other" id="b_q3_other_check"> 
+                    Other: <input type="text" name="b_unsold_management_other" class="other-input" placeholder="Please specify..." onclick="document.getElementById('b_q3_other_check').checked = true;">
+                </label>
+            </div>
+        </div>
+
+        <div class="section-title">Section 2: Rental Model Feedback</div>
+
+        <div class="question-group">
+            <label>4. How would you rate your interest in a "Rental-as-a-Service" model to monetize existing inventory?</label>
+            <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="b_interest_level" value="5" required> Very Interested</label>
+                <label class="radio-option"><input type="radio" name="b_interest_level" value="4"> Somewhat Interested</label>
+                <label class="radio-option"><input type="radio" name="b_interest_level" value="3"> Neutral</label>
+                <label class="radio-option"><input type="radio" name="b_interest_level" value="2"> Not very interested</label>
+                <label class="radio-option"><input type="radio" name="b_interest_level" value="1"> Not at all interested</label>
             </div>
         </div>
 
         <div class="question-group">
-            <label>5. Rent-to-Own Flexibility</label>
-            <label style="font-weight: normal;">Would you allow customers to buy the item at a discount if they fall in love after renting it?</label>
+            <label>5. Which consumer purchase options would you consider for items listed on the rental platform?</label>
             <div class="radio-group">
-                <label class="radio-option"><input type="radio" name="b_rent_to_own" value="Yes" required> Yes, great way to clear stock.</label>
-                <label class="radio-option"><input type="radio" name="b_rent_to_own" value="Maybe"> Maybe, depends on the piece.</label>
-                <label class="radio-option"><input type="radio" name="b_rent_to_own" value="No"> No, keep rental and sales separate.</label>
+                <label class="radio-option"><input type="radio" name="b_purchase_option" value="Rental Only" required> Rental only (preserving stock for future rentals)</label>
+                <label class="radio-option"><input type="radio" name="b_purchase_option" value="Direct Purchase"> Direct purchase (option to buy at full/discounted retail at any time)</label>
+                <label class="radio-option"><input type="radio" name="b_purchase_option" value="Rent-to-Own"> "Rent-to-own" (rental fee applied toward purchase price)</label>
+                <label class="radio-option"><input type="radio" name="b_purchase_option" value="Hybrid"> Undecided / Would vary by specific item</label>
+                <label class="radio-option">
+                    <input type="radio" name="b_purchase_option" value="Other" id="b_q5_other_radio"> 
+                    Other: <input type="text" name="b_purchase_option_other" class="other-input" placeholder="Please specify..." onclick="document.getElementById('b_q5_other_radio').checked = true;">
+                </label>
+            </div>
+        </div>
+
+        <div class="question-group" style="background: #fdfaf0; padding: 20px; border-radius: 8px; border: 1px solid #eee;">
+            <label>6. Revenue Split Analysis</label>
+            <p style="font-size: 0.9rem; margin-bottom: 15px; color: #666;">Scenario: A $600 retail dress is rented for 4 days at $80. After platform fees, the boutique nets approx. $60 per rental.</p>
+            <label style="font-weight: normal;">How would you describe this potential return on investment (ROI)?</label>
+            <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="b_roi_opinion" value="Strongly Positive" required> Very attractive</label>
+                <label class="radio-option"><input type="radio" name="b_roi_opinion" value="Positive"> Reasonable / Fair</label>
+                <label class="radio-option"><input type="radio" name="b_roi_opinion" value="Neutral"> Neutral / Depends on item volume</label>
+                <label class="radio-option"><input type="radio" name="b_roi_opinion" value="Negative"> Below expectations</label>
             </div>
         </div>
 
         <div class="question-group">
-            <label>6. Cleaning & Maintenance</label>
-            <label style="font-weight: normal;">How would you prefer cleaning to be handled?</label>
-            <select name="b_cleaning_pref" required>
-                <option value="">Select preference...</option>
-                <option value="Boutique Handled">I prefer to use my own trusted dry cleaners</option>
-                <option value="Platform Handled">SZNL should handle professional cleaning</option>
-                <option value="Either">Either, as long as it's insured</option>
+            <label>7. Logistics & Fulfillment</label>
+            <label style="font-weight: normal;">Which fulfillment method best aligns with your current store operations?</label>
+            <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="b_logistics" value="In-store Pickup" required> In-store pickup/drop-off only (to drive foot traffic)</label>
+                <label class="radio-option"><input type="radio" name="b_logistics" value="Shipping"> Shipping via pre-paid labels (managed by SZNL)</label>
+                <label class="radio-option"><input type="radio" name="b_logistics" value="Hybrid"> Hybrid approach</label>
+                <label class="radio-option">
+                    <input type="radio" name="b_logistics" value="Other" id="b_q7_other_radio"> 
+                    Other: <input type="text" name="b_logistics_other" class="other-input" placeholder="Please specify..." onclick="document.getElementById('b_q7_other_radio').checked = true;">
+                </label>
+            </div>
+        </div>
+
+        <div class="section-title">Section 3: Risk & Integration</div>
+
+        <div class="question-group">
+            <label>8. What is your primary concern regarding a luxury rental partnership?</label>
+            <select name="b_primary_concern" required>
+                <option value="">Select your main concern...</option>
+                <option value="Damage">Wear and tear / damage to garments</option>
+                <option value="Brand Image">Brand dilution or exclusivity concerns</option>
+                <option value="Operations">Integration with current POS/Workflow</option>
+                <option value="Theft">Loss of high-value items</option>
+                <option value="None">I have no significant concerns</option>
             </select>
         </div>
 
         <div class="question-group">
-            <label>7. Management Effort</label>
-            <label style="font-weight: normal;">How would you prefer to list your items on the SZNL platform?</label>
-            <div class="radio-group">
-                <label class="radio-option"><input type="radio" name="b_effort" value="Self" required> I'll upload photos/info myself.</label>
-                <label class="radio-option"><input type="radio" name="b_effort" value="White Glove"> I want SZNL to come and photograph/list for me.</label>
-                <label class="radio-option"><input type="radio" name="b_effort" value="API"> I need it to sync with my current POS/Shopify.</label>
-            </div>
+            <label>9. What are your expectations or requirements regarding garment care and professional cleaning?</label>
+            <textarea name="b_cleaning_expectations" placeholder="Please describe your preferred cleaning process, required certifications, or specific eco-friendly standards..." rows="4"></textarea>
         </div>
 
         <div class="question-group">
-            <label>8. Damage & Security</label>
-            <label style="font-weight: normal;">What specific security measures or insurance coverage would be mandatory for you to list high-value pieces?</label>
-            <input type="text" name="b_security_needs" placeholder="e.g. Damage insurance, ID verification, etc.">
+            <label>10. Boutique Contact Information</label>
+            <input type="text" name="b_store_name" placeholder="Boutique/Store Name" required style="margin-bottom: 10px;">
+            <input type="text" name="b_location" placeholder="City/Region" required style="margin-bottom: 10px;">
+            <input type="email" name="b_email" placeholder="Professional Email Address" required>
         </div>
 
-        <div class="question-group">
-            <label>9. Logistics Preference</label>
-            <select name="logistics_pref">
-                <option value="Pickup">I prefer customers pick up in-store (Drives foot traffic)</option>
-                <option value="Shipping">I prefer to ship items (Reaches more customers)</option>
-                <option value="Both">I am open to both</option>
-            </select>
-        </div>
-
-        <div class="question-group">
-            <label>10. Boutique Contact (For Beta Access)</label>
-            <input type="text" name="boutique_name" placeholder="Boutique Name" required>
-            <input type="email" name="contact_email" placeholder="Email Address" style="margin-top: 10px;" required>
-        </div>
-
-        <button type="submit" class="submit-btn">SUBMIT PARTNER FEEDBACK</button>
+        <button type="submit" class="submit-btn">SUBMIT PARTNER EVALUATION</button>
     </form>
 
     <!-- SHOPPER SURVEY -->
     <form id="shopper-form" class="form-card" onsubmit="submitForm(event)">
         <h2 style="color: var(--forest); border-bottom: 1px solid #eee; padding-bottom: 15px; margin-top: 0; font-family: 'Georgia', serif;">Shopper Experience</h2>
 
+        <div class="section-title">Section 1: Event & Shopping Habits</div>
+        
         <div class="question-group">
-            <label>1. How often do you attend events requiring a "special" outfit?</label>
-            <select name="event_frequency" required>
-                <option value="">Select frequency...</option>
-                <option value="1-2">1-2 times a year</option>
-                <option value="3-5">3-5 times a year</option>
-                <option value="6+">6+ times a year</option>
-            </select>
-        </div>
-
-        <div class="question-group">
-            <label>2. Thrift & Budget Habits</label>
-            <label style="font-weight: normal;">How often do you find yourself thifting or browsing luxury resale only to find the items are still out of your budget?</label>
+            <label>1. How many times per year do you attend events that require a "special" outfit? (Weddings, galas, themed parties, etc.)</label>
             <div class="radio-group">
-                <label class="radio-option"><input type="radio" name="s_thrift_budget" value="Frequently" required> Frequently</label>
-                <label class="radio-option"><input type="radio" name="s_thrift_budget" value="Occasionally"> Occasionally</label>
-                <label class="radio-option"><input type="radio" name="s_thrift_budget" value="Rarely"> Rarely (I usually buy)</label>
+                <label class="radio-option"><input type="radio" name="s1_q1" value="0" required> 0 times</label>
+                <label class="radio-option"><input type="radio" name="s1_q1" value="1-2"> 1–2 times</label>
+                <label class="radio-option"><input type="radio" name="s1_q1" value="3-5"> 3–5 times</label>
+                <label class="radio-option"><input type="radio" name="s1_q1" value="6+"> 6+ times</label>
             </div>
         </div>
 
         <div class="question-group">
-            <label>3. The "Single-Wear" Statement</label>
-            <label style="font-weight: normal;">How often do you purchase "statement" pieces that you end up wearing only once or a few times?</label>
+            <label>2. When browsing luxury resale or vintage, how often do you decide against a purchase due to the price?</label>
             <div class="radio-group">
-                <label class="radio-option"><input type="radio" name="s_single_wear" value="All the time" required> Very often</label>
-                <label class="radio-option"><input type="radio" name="s_single_wear" value="Sometimes"> Sometimes</label>
-                <label class="radio-option"><input type="radio" name="s_single_wear" value="Never"> Rarely (I focus on basics)</label>
+                <label class="radio-option"><input type="radio" name="s1_q2" value="Always" required> Always</label>
+                <label class="radio-option"><input type="radio" name="s1_q2" value="Frequently"> Frequently</label>
+                <label class="radio-option"><input type="radio" name="s1_q2" value="Occasionally"> Occasionally</label>
+                <label class="radio-option"><input type="radio" name="s1_q2" value="Rarely"> Rarely / Price is not a primary concern</label>
             </div>
         </div>
 
         <div class="question-group">
-            <label>4. The "Try-Before-Buy" Factor</label>
-            <label style="font-weight: normal;">How likely are you to rent an item primarily to see if you want to buy it later?</label>
+            <label>3. Think of the "statement" pieces in your wardrobe. How many of them have you worn fewer than 3 times in the last year?</label>
             <div class="radio-group">
-                <label class="radio-option"><input type="radio" name="s_try_buy" value="Very Likely" required> Very Likely</label>
-                <label class="radio-option"><input type="radio" name="s_try_buy" value="Somewhat Likely"> Somewhat Likely</label>
-                <label class="radio-option"><input type="radio" name="s_try_buy" value="Unlikely"> Unlikely</label>
+                <label class="radio-option"><input type="radio" name="s1_q3" value="None" required> None (I wear everything I buy)</label>
+                <label class="radio-option"><input type="radio" name="s1_q3" value="A few"> A few items</label>
+                <label class="radio-option"><input type="radio" name="s1_q3" value="Majority"> The majority of them</label>
+                <label class="radio-option"><input type="radio" name="s1_q3" value="Dont buy statements"> I don't buy statement pieces</label>
             </div>
         </div>
 
         <div class="question-group">
-            <label>5. Ideal Rental Duration</label>
+            <label>4. Have you ever used a clothing rental service before? (e.g., Rent the Runway, Nuuly, etc.)</label>
             <div class="radio-group">
-                <label class="radio-option"><input type="radio" name="s_duration" value="3 Days" required> 3 Days</label>
-                <label class="radio-option"><input type="radio" name="s_duration" value="4 Days"> 4 Days</label>
-                <label class="radio-option"><input type="radio" name="s_duration" value="7 Days"> 7 Days</label>
+                <label class="radio-option"><input type="radio" name="s1_q4" value="Yes regularly" onclick="toggleNoWhy(false)" required> Yes, regularly</label>
+                <label class="radio-option"><input type="radio" name="s1_q4" value="Yes once or twice" onclick="toggleNoWhy(false)"> Yes, once or twice</label>
+                <label class="radio-option"><input type="radio" name="s1_q4" value="No" onclick="toggleNoWhy(true)"> No</label>
+                <div id="no-why-container" style="display:none; margin-top: 10px;">
+                    <input type="text" name="s1_q4_why" placeholder="If no, why?">
+                </div>
             </div>
         </div>
 
+        <div class="section-title">Section 2: The SZNL Concept</div>
+
         <div class="question-group">
-            <label>6. Local Discovery</label>
-            <label style="font-weight: normal;">Would you pick up an item from a local boutique to avoid shipping and try it on first?</label>
+            <label>5. If you could rent a high-end vintage piece for 10-15% of its retail value, how likely would you be to do so for your next event?</label>
             <div class="radio-group">
-                <label class="radio-option"><input type="radio" name="s_pickup" value="Yes" required> Yes, definitely.</label>
-                <label class="radio-option"><input type="radio" name="s_pickup" value="No"> No, I prefer shipping.</label>
+                <label class="radio-option"><input type="radio" name="s2_q5" value="Very Likely" required> Very Likely</label>
+                <label class="radio-option"><input type="radio" name="s2_q5" value="Somewhat Likely"> Somewhat Likely</label>
+                <label class="radio-option"><input type="radio" name="s2_q5" value="Neutral"> Neutral</label>
+                <label class="radio-option"><input type="radio" name="s2_q5" value="Unlikely"> Unlikely</label>
             </div>
         </div>
 
         <div class="question-group">
-            <label>7. Style Preferences (Check all that apply)</label>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px;">
-                <label class="radio-option"><input type="checkbox" name="styles" value="Quiet Luxury"> Quiet Luxury</label>
-                <label class="radio-option"><input type="checkbox" name="styles" value="Maximalism"> Bold Maximalism</label>
-                <label class="radio-option"><input type="checkbox" name="styles" value="Vintage"> Curated Vintage</label>
-                <label class="radio-option"><input type="checkbox" name="styles" value="Sustainable"> Eco/Sustainable</label>
+            <label>6. Which of these factors would most encourage you to rent vintage locally? (Rank your top 2)</label>
+            <div class="radio-group">
+                <label class="radio-option"><input type="checkbox" name="s2_q6" value="Lower price"> Lower price than buying</label>
+                <label class="radio-option"><input type="checkbox" name="s2_q6" value="Sustainability"> Sustainability/Eco-friendly choice</label>
+                <label class="radio-option"><input type="checkbox" name="s2_q6" value="Unique pieces"> Access to unique, one-of-a-kind pieces</label>
+                <label class="radio-option"><input type="checkbox" name="s2_q6" value="Try before buy"> The ability to "try before you buy"</label>
+                <label class="radio-option"><input type="checkbox" name="s2_q6" value="Pick up in-store"> Ability to pick up in-store (skip shipping)</label>
             </div>
         </div>
 
         <div class="question-group">
-            <label>8. What designer brand would you most want to see on SZNL?</label>
-            <input type="text" name="s_brand_wishlist" placeholder="e.g. Jacquemus, Khaite, Ganni...">
+            <label>7. What is the maximum you would be willing to pay to rent a designer vintage dress for a weekend?</label>
+            <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="s2_q7" value="Under 50" required> Under $50</label>
+                <label class="radio-option"><input type="radio" name="s2_q7" value="50-100"> $50–$100</label>
+                <label class="radio-option"><input type="radio" name="s2_q7" value="100-200"> $100–$200</label>
+                <label class="radio-option"><input type="radio" name="s2_q7" value="200+"> $200+</label>
+            </div>
         </div>
 
         <div class="question-group">
-            <label>9. Join the Waitlist (Optional)</label>
-            <input type="email" name="s_contact_email" placeholder="Email Address">
+            <label>8. For a weekend event, which rental duration feels most comfortable?</label>
+            <div class="radio-group">
+                <label class="radio-option"><input type="radio" name="s2_q8" value="3 Days" required> 3 Days (Pick up Friday, return Sunday)</label>
+                <label class="radio-option"><input type="radio" name="s2_q8" value="4 Days"> 4 Days (Pick up Friday, return Monday)</label>
+                <label class="radio-option"><input type="radio" name="s2_q8" value="7 Days"> 7 Days</label>
+            </div>
+        </div>
+
+        <div class="section-title">Section 3: Style & Curation</div>
+
+        <div class="question-group">
+            <label>9. Which styles resonate most with your personal brand? (Select all that apply)</label>
+            <div class="radio-group">
+                <label class="radio-option"><input type="checkbox" name="s3_q9" value="Quiet Luxury"> Quiet Luxury (Minimalist, high-quality, neutrals)</label>
+                <label class="radio-option"><input type="checkbox" name="s3_q9" value="Bold Maximalism"> Bold Maximalism (Prints, sequins, avant-garde)</label>
+                <label class="radio-option"><input type="checkbox" name="s3_q9" value="True Vintage"> True Vintage (70s, 80s, 90s specific eras)</label>
+                <label class="radio-option"><input type="checkbox" name="s3_q9" value="Modern Cult"> Modern Cult Favorites (Trending contemporary designers)</label>
+            </div>
+        </div>
+
+        <div class="question-group">
+            <label>10. What specific designer or "era" is currently missing from your closet?</label>
+            <textarea name="s3_q10" placeholder="e.g. 90s Prada, Phoebe Philo era Celine..."></textarea>
+        </div>
+
+        <div class="question-group">
+            <label>11. Join the SZNL Waitlist</label>
+            <input type="email" name="waitlist_email" placeholder="Email Address (Optional)">
         </div>
 
         <button type="submit" class="submit-btn">SUBMIT SHOPPER FEEDBACK</button>
@@ -288,61 +339,56 @@
     <div id="success-message" class="success-msg">
         <h2>Submission Successful.</h2>
         <p>Your feedback is invaluable. We are launching <strong>SZNL</strong> soon.</p>
-        <p style="font-size: 0.9rem; color: #777; margin-top: 15px;">Check your email for activation if this is your first submission.</p>
-        <p style="font-size: 0.9rem; color: #777; margin-top: 5px;">We have received your details. Look out for our upcoming beta announcement.</p>
         <button class="role-btn" onclick="location.reload()" style="margin-top: 30px; width: auto;">Return to Home</button>
     </div>
 
 </div>
 
 <script>
+    function toggleNoWhy(show) {
+        document.getElementById('no-why-container').style.display = show ? 'block' : 'none';
+    }
+
     function switchRole(role) {
         const buttons = document.querySelectorAll('.role-btn');
         buttons.forEach(btn => btn.classList.remove('active'));
         
-        // Handle button highlighting
-        if (event && event.currentTarget && event.currentTarget.classList.contains('role-btn')) {
-            event.currentTarget.classList.add('active');
-        } else {
-            const targetIdx = role === 'boutique' ? 0 : 1;
-            buttons[targetIdx].classList.add('active');
-        }
-
         const bForm = document.getElementById('boutique-form');
         const sForm = document.getElementById('shopper-form');
         const successMsg = document.getElementById('success-message');
 
-        // Reset visibility and display for all
-        bForm.classList.remove('visible');
-        sForm.classList.remove('visible');
         bForm.style.display = 'none';
         sForm.style.display = 'none';
         successMsg.style.display = 'none';
 
         if(role === 'boutique') {
+            buttons[0].classList.add('active');
             bForm.style.display = 'block';
-            setTimeout(() => bForm.classList.add('visible'), 10);
+            bForm.classList.add('visible');
         } else {
+            buttons[1].classList.add('active');
             sForm.style.display = 'block';
-            setTimeout(() => sForm.classList.add('visible'), 10);
+            sForm.classList.add('visible');
         }
     }
 
     async function submitForm(e) {
         e.preventDefault();
-        
-        const bForm = document.getElementById('boutique-form');
-        const sForm = document.getElementById('shopper-form');
-        const successMsg = document.getElementById('success-message');
-        
-        // Determine which form is currently active
-        const activeForm = bForm.style.display === 'block' ? bForm : sForm;
+        const activeForm = e.target;
         const submitBtn = activeForm.querySelector('.submit-btn');
+
+        // Validation for Top 2 ranking (max 2 for question 6)
+        if (activeForm.id === 'shopper-form') {
+            const checked = activeForm.querySelectorAll('input[name="s2_q6"]:checked');
+            if (checked.length > 2) {
+                alert("Please select only your top 2 factors for Question 6.");
+                return;
+            }
+        }
 
         const formData = new FormData(activeForm);
         formData.append("_subject", "SZNL Market Research: " + (activeForm.id === 'boutique-form' ? 'Boutique' : 'Shopper'));
         formData.append("_captcha", "false");
-        formData.append("_template", "table");
 
         submitBtn.innerText = "SENDING...";
         submitBtn.disabled = true;
@@ -354,19 +400,12 @@
             });
 
             if (response.ok) {
-                // Hide both forms
-                bForm.style.display = 'none';
-                sForm.style.display = 'none';
-                bForm.classList.remove('visible');
-                sForm.classList.remove('visible');
-                
-                // Show success message
-                successMsg.style.display = 'block';
+                activeForm.style.display = 'none';
+                document.getElementById('success-message').style.display = 'block';
             } else {
-                throw new Error("Failed to send via AJAX");
+                throw new Error("API error");
             }
         } catch (error) {
-            console.warn("AJAX failed, trying standard redirect...", error);
             activeForm.action = "https://formsubmit.co/jilanizehra@gmail.com";
             activeForm.method = "POST";
             activeForm.submit();
