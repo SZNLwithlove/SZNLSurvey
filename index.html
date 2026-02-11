@@ -203,6 +203,7 @@
                 <label class="option-card"><input type="checkbox" name="B4_SH_Cats" value="Workwear"> Workwear</label>
                 <label class="option-card"><input type="checkbox" name="B4_SH_Cats" value="Maternity"> Maternity</label>
                 <label class="option-card"><input type="checkbox" name="B4_SH_Cats" value="Activewear"> Activewear</label>
+                <label class="option-card" style="grid-column: span 1;">Other: <input type="text" name="B4_Other" class="other-input"></label>
             </div>
         </div>
 
@@ -240,6 +241,7 @@
                 <label class="option-card"><input type="checkbox" name="B7_Action" value="Borrow"> Borrow from friends/family</label>
                 <label class="option-card"><input type="checkbox" name="B7_Action" value="Rewear"> Rewear something I own</label>
                 <label class="option-card"><input type="checkbox" name="B7_Action" value="Rent"> Rent</label>
+                <label class="option-card" style="grid-column: span 1;">Other: <input type="text" name="B7_Other" class="other-input"></label>
             </div>
         </div>
 
@@ -296,6 +298,7 @@
                 <label class="option-card"><input type="checkbox" name="E6_UseCases" value="Seasonal outerwear"> Seasonal outerwear</label>
                 <label class="option-card"><input type="checkbox" name="E6_UseCases" value="Maternity"> Maternity</label>
                 <label class="option-card"><input type="checkbox" name="E6_UseCases" value="Accessories"> Accessories/bags</label>
+                <label class="option-card" style="grid-column: span 1;">Other: <input type="text" name="E6_Other" class="other-input"></label>
             </div>
         </div>
 
@@ -598,6 +601,9 @@
 
             const t11Checked = activeForm.querySelectorAll('input[name="T11_Rank"]:checked');
             if (t11Checked.length > 3) { alert("Please select only your top 3 for T11."); return; }
+            
+            const e6Checked = activeForm.querySelectorAll('input[name="E6_UseCases"]:checked');
+            if (e6Checked.length > 3) { alert("Please select a maximum of 3 use cases for E6."); return; }
         }
 
         const formData = new FormData(activeForm);
